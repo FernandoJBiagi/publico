@@ -1,0 +1,16 @@
+{% extends 'notas/base.html' %}
+
+{% block title %}Operador de Caixa{% endblock %}
+
+{% block content %}
+<h1>Lista de Viagens Finalizadas</h1>
+<ul>
+    {% for viagem in viagens %}
+        <li>
+            <a href="{% url 'nota_review' viagem.id %}">
+                Revisar Notas de {{ viagem.destino }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
