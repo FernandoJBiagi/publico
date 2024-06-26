@@ -25,7 +25,7 @@
             <ul class="list-group">
                 {% for nota in notas %}
                     {% if nota.anexo %}
-                        <li class="list-group-item">{{ nota }} - <a href="{{ nota.anexo.url }}" target="_blank">Visualizar Foto</a></li>
+                        <li class="list-group-item">{{ nota }} - <a href="{{ nota.anexo.url }}" target="_blank">Visualizar Anexo</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
