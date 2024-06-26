@@ -1,0 +1,39 @@
+<!-- templates/notas/pages/viagem_detail.html -->
+{% extends 'notas/base.html' %}
+
+{% block title %}Detalhes da Viagem{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Detalhes da Viagem</h2>
+        <p>Destino: {{ viagem.destino }}</p>
+        <p>Veículo: {{ viagem.veiculo }}</p>
+        <p>Data de Início: {{ viagem.data_inicio }}</p>
+        <p>Data de Fim: {{ viagem.data_fim }}</p>
+        <p>Nome do Funcionário: {{ viagem.nome_funcionario }}</p>
+        <p>Matrícula: {{ viagem.matricula }}</p>
+        <p>Centro de Custo: {{ viagem.centro_de_custo }}</p>
+        <p>Motivo: {{ viagem.motivo }}</p>
+        <p>KM Inicial: {{ viagem.km_inicial }}</p>
+        <p>KM Final: {{ viagem.km_final }}</p>
+        <p>Status: {{ viagem.status }}</p>
+        {% if viagem.status == 'Iniciada' %}
+            <form method="post" action="{% url 'finalizar_viagem' viagem.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Finalizar Viagem</button>
+            </form>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        <h2>Notas</h2>
+        <ul class="list-group">
+            {% for nota in viagem.notas.all %}
+                <li class="list-group-item">
+                    <a href="{{ nota.anexo.url }}" target="_blank">{{ nota }} - Visualizar Anexo</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

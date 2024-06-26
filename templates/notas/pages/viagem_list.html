@@ -1,0 +1,15 @@
+<!-- templates/notas/pages/viagem_list.html -->
+{% extends 'notas/base.html' %}
+
+{% block title %}Lista de Viagens{% endblock %}
+
+{% block content %}
+<h1>Lista de Viagens</h1>
+<ul>
+    {% for viagem in viagens %}
+        <li>
+            <a href="{% url 'viagem_detail' viagem.id %}">{{ viagem }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

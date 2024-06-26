@@ -1,0 +1,37 @@
+{% extends 'notas/base.html' %}
+
+{% block title %}Página Inicial{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Viagens</h2>
+        <a href="{% url 'viagem_create' %}" class="btn btn-primary mb-3">Criar Nova Viagem</a>
+        <ul class="list-group">
+            {% for viagem in viagens %}
+                <li class="list-group-item">
+                    <a href="?viagem_id={{ viagem.id }}">{{ viagem }} - {{ viagem.status }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h2>Notas</h2>
+        {% if notas %}
+            <h3>Notas para {{ selected_viagem }}</h3>
+            {% if selected_viagem.status == 'Iniciada' %}
+                <a href="{% url 'nota_create' %}?viagem_id={{ selected_viagem.id }}" class="btn btn-primary mb-3">Criar Nova Nota</a>
+            {% endif %}
+            <ul class="list-group">
+                {% for nota in notas %}
+                    {% if nota.anexo %}
+                        <li class="list-group-item">{{ nota }} - <a href="{{ nota.anexo.url }}" target="_blank">Visualizar Anexo</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Selecione uma viagem para ver as notas.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
