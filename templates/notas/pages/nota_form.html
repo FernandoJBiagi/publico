@@ -4,10 +4,12 @@
 {% block title %}Nova Nota{% endblock %}
 
 {% block content %}
-<h1>Criar Nova Nota</h1>
-<form method="post" enctype="multipart/form-data" action="{% url 'nota_create' %}?viagem_id={{ form.initial.viagem.id }}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Salvar</button>
-</form>
+<div class="container">
+    <h1>Nova Nota</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+</div>
 {% endblock %}

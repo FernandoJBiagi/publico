@@ -37,22 +37,14 @@ class Nota(models.Model):
         ('OU', 'Outros')
     )
 
-    STATUS_CHOICES = (
-        ('Pendente', 'Pendente'),
-        ('Em Revisão', 'Em Revisão'),
-        ('Aprovada', 'Aprovada'),
-        ('Reprovada', 'Reprovada'),
-    )
-
     tipo = models.CharField(max_length=2, choices=TIPO_ESCOLHAS)
     valor_nota = models.FloatField()
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_nota = models.DateField(default=date.today)
     anexo = models.FileField(upload_to='attachments/', null=True, blank=True)
     viagem = models.ForeignKey(Viagem, on_delete=models.CASCADE, related_name='notas')
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pendente')
-    aprovadores = models.ManyToManyField('auth.User', related_name='notas_aprovadas', blank=True)
+    conteudo = models.TextField(null=True, blank=True)  # Novo campo para o conteúdo extraído
+    status = models.CharField(max_length=10, choices=[('Pendente', 'Pendente'), ('Aprovada', 'Aprovada'), ('Reprovada', 'Reprovada')], default='Pendente')
 
     def __str__(self):
         return f"Nota {self.id} - {self.tipo} - {self.valor_nota}"
-

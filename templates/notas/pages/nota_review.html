@@ -1,18 +1,18 @@
 {% extends 'notas/base.html' %}
 
-{% block title %}Revisar Notas de {{ viagem.destino }}{% endblock %}
+{% block title %}Revisar Notas{% endblock %}
 
 {% block content %}
-<h1>Revisar Notas de {{ viagem.destino }}</h1>
-<table class="table">
+<h1>Revisar Notas para {{ viagem.destino }}</h1>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
             <th>Tipo</th>
             <th>Valor</th>
             <th>Data</th>
+            <th>Conteúdo</th>
             <th>Status</th>
-            <th>Anexo</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -23,21 +23,14 @@
             <td>{{ nota.get_tipo_display }}</td>
             <td>{{ nota.valor_nota }}</td>
             <td>{{ nota.data_nota }}</td>
+            <td>{{ nota.conteudo }}</td>
             <td>{{ nota.status }}</td>
             <td>
-                {% if nota.anexo %}
-                <a href="{{ nota.anexo.url }}" target="_blank">Ver Anexo</a>
+                {% if nota.status == 'Pendente' %}
+                <a href="{% url 'aprovar_nota' nota.id %}" class="btn btn-success">Aprovar</a>
+                <a href="{% url 'reprovar_nota' nota.id %}" class="btn btn-danger">Reprovar</a>
                 {% else %}
-                Nenhum anexo
-                {% endif %}
-            </td>
-            <td>
-                {% if nota.status != 'Aprovada' and nota.status != 'Reprovada' %}
-                <form method="post" action="{% url 'nota_review' viagem.id %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="nota_id" value="{{ nota.id }}">
-                    <button type="submit" class="btn btn-primary">Direcionar</button>
-                </form>
+                Aprovada/Reprovada
                 {% endif %}
             </td>
         </tr>

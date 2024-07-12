@@ -5,6 +5,8 @@ from .forms import ViagemForm, NotaForm
 from django.urls import reverse_lazy
 from django.contrib import messages
 from datetime import date
+import pytesseract
+from PIL import Image
 
 class HomeView(TemplateView):
     template_name = 'notas/pages/index.html'
@@ -68,10 +70,18 @@ class NotaCreateView(CreateView):
         return initial
 
     def form_valid(self, form):
-        viagem = form.cleaned_data['viagem']
-        if viagem.status == 'Finalizada':
-            messages.error(self.request, 'Não é possível adicionar notas a uma viagem finalizada.')
-            return redirect('viagem_detail', pk=viagem.id)
+        # Salvar a instância da nota primeiro para obter o arquivo
+        self.object = form.save()
+        if self.object.anexo:
+            # Abrir o arquivo da memória
+            anexo = self.object.anexo
+            image = Image.open(anexo)
+            image_text = pytesseract.image_to_string(image)
+
+            # Salvar o texto extraído no campo conteúdo
+            self.object.conteudo = image_text
+            self.object.save()
+
         return super().form_valid(form)
 
 class FinalizarViagemView(View):
@@ -105,20 +115,7 @@ class NotaReviewView(View):
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
-        nota_id = request.POST.get('nota_id')
-        nota = get_object_or_404(Nota, pk=nota_id)
-        valor_nota = nota.valor_nota
-
-        if valor_nota > 70:
-            # Direcionar para dois aprovadores
-            messages.success(request, 'Nota enviada para dois aprovadores.')
-        else:
-            # Direcionar para um aprovador
-            messages.success(request, 'Nota enviada para um aprovador.')
-
-        nota.status = 'Pendente'
-        nota.save()
-
+        # Logic to handle the note review and redirection to approvers
         return redirect('caixa_list')
 
 class AprovadorListView(ListView):
