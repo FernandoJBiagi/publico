@@ -1,5 +1,9 @@
 from django.urls import path
-from .views import HomeView, ViagemListView, ViagemDetailView, NotaListView, ViagemCreateView, NotaCreateView, FinalizarViagemView, CaixaListView, NotaReviewView, AprovadorListView, AprovarNotaView
+from .views import (
+    HomeView, ViagemListView, ViagemDetailView, NotaListView,
+    ViagemCreateView, NotaCreateView, FinalizarViagemView,
+    CaixaListView, NotaReviewView, AprovadorListView, AprovarNotaView
+)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -12,5 +16,5 @@ urlpatterns = [
     path('caixa/', CaixaListView.as_view(), name='caixa_list'),
     path('caixa/nota/<int:viagem_id>/', NotaReviewView.as_view(), name='nota_review'),
     path('aprovador/', AprovadorListView.as_view(), name='aprovador_list'),
-    path('aprovador/aprovar/<int:pk>/', AprovarNotaView.as_view(), name='aprovar_nota'),
+    path('aprovador/nota/<int:pk>/', AprovarNotaView.as_view(), name='aprovar_nota'),
 ]

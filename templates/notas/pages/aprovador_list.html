@@ -1,24 +1,50 @@
 {% extends 'notas/base.html' %}
 
-{% block title %}Aprovador{% endblock %}
+{% block title %}Notas Pendentes{% endblock %}
 
 {% block content %}
-<h1>Notas Pendentes de Aprovação</h1>
-<ul>
-    {% for nota in notas %}
-        <li>
-            Nota {{ nota.id }} - {{ nota.tipo }} - R$ {{ nota.valor_nota }}
-            <form method="post" action="{% url 'aprovar_nota' nota.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="status" value="Aprovada">
-                <button type="submit">Aprovar</button>
-            </form>
-            <form method="post" action="{% url 'aprovar_nota' nota.id %}">
-                {% csrf_token %}
-                <input type="hidden" name="status" value="Reprovada">
-                <button type="submit">Reprovar</button>
-            </form>
-        </li>
-    {% endfor %}
-</ul>
+<h1>Notas Pendentes</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Valor</th>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Anexo</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for nota in notas %}
+        <tr>
+            <td>{{ nota.id }}</td>
+            <td>{{ nota.get_tipo_display }}</td>
+            <td>{{ nota.valor_nota }}</td>
+            <td>{{ nota.data_nota }}</td>
+            <td>{{ nota.status }}</td>
+            <td>
+                {% if nota.anexo %}
+                <a href="{{ nota.anexo.url }}" target="_blank">Ver Anexo</a>
+                {% else %}
+                Nenhum anexo
+                {% endif %}
+            </td>
+            <td>
+                <form method="post" action="{% url 'aprovar_nota' nota.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="Aprovada">
+                    <button type="submit" class="btn btn-success">Aprovar</button>
+                </form>
+                <form method="post" action="{% url 'aprovar_nota' nota.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="status" value="Reprovada">
+                    <button type="submit" class="btn btn-danger">Reprovar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

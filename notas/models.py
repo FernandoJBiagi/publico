@@ -55,3 +55,4 @@ class Nota(models.Model):
 
     def __str__(self):
         return f"Nota {self.id} - {self.tipo} - {self.valor_nota}"
+
